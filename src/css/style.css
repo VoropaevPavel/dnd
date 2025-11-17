@@ -1,0 +1,341 @@
+/* General Layout and Body */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f5f7;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Board Container */
+.board {
+  display: flex;
+  padding: 20px;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 1227px;
+  width: 100%;
+}
+
+/* Column Styling */
+.column {
+  background-color: #ebecf0;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 275px;
+  padding: 15px;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  transition: all 0.2s ease;
+}
+
+.column:hover {
+  background-color: #f4f5f7;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.column-header {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 28px;
+  color: #172b4d;
+  transition: color 0.2s ease;
+}
+
+.column:hover .column-header {
+  color: #0079bf;
+}
+
+/* Cards Container */
+.cards {
+  flex-grow: 1;
+  min-height: 200px;
+  position: relative;
+}
+
+/* Card Styling */
+.card {
+  background-color: white;
+  border-radius: 5px;
+  padding: 12px;
+  margin-bottom: 12px;
+  cursor: grab;
+  position: relative;
+  font-size: 16px;
+  padding-right: 52px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+/* Card Hover Effects */
+.card:hover .delete-card,
+.card:hover .edit-card {
+  display: flex;
+}
+
+/* Dragging Card Effects */
+.card.dragging {
+  opacity: 0.7;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  cursor: grabbing !important;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Buttons - Delete and Edit */
+.delete-card,
+.edit-card {
+  display: none;
+  position: absolute;
+  cursor: pointer;
+  font-size: 18px;
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-weight: bold;
+}
+
+.delete-card {
+  right: 8px;
+  top: 8px;
+  color: #ff4444;
+}
+
+.delete-card:hover {
+  background-color: rgba(255, 68, 68, 0.1);
+  color: #ff6666;
+}
+
+.edit-card {
+  right: 31px;
+  top: 8px;
+  color: #0079bf;
+}
+
+.edit-card:hover {
+  background-color: rgba(0, 121, 191, 0.1);
+  color: #00a8ff;
+}
+
+/* Add Card Button */
+.add-card {
+  color: #5e6c84;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 12px;
+  border-radius: 5px;
+  background-color: transparent;
+  text-align: center;
+  margin-top: auto;
+}
+
+.add-card:hover {
+  background-color: #091e4214;
+}
+
+/* Drop Indicator */
+.drop-indicator {
+  background: linear-gradient(90deg, #0079bf 0%, #00a8ff 100%) !important;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 999;
+  position: absolute;
+  height: 6px;
+  box-shadow: 0 0 8px rgba(0, 121, 191, 0.6);
+  animation: dropIndicatorPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes dropIndicatorPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scaleY(1.2);
+  }
+}
+
+/* Modal Window */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+}
+
+.modal {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow: hidden;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal {
+  transform: scale(1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e4e4e4;
+  background-color: #f8f9fa;
+  border-radius: 8px 8px 0 0;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #172b4d;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #6b778c;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background-color: #e4e4e4;
+  color: #172b4d;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-textarea {
+  width: 100%;
+  border: 2px solid #e4e4e4;
+  border-radius: 5px;
+  padding: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.modal-textarea:focus {
+  outline: none;
+  border-color: #0079bf;
+  box-shadow: 0 0 0 3px rgba(0, 121, 191, 0.1);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px;
+  border-top: 1px solid #e4e4e4;
+  background-color: #f8f9fa;
+  border-radius: 0 0 8px 8px;
+}
+
+.modal-btn {
+  padding: 8px 16px;
+  border-radius: 5px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+}
+
+.modal-btn-cancel {
+  background-color: transparent;
+  color: #6b778c;
+  border: 1px solid #e4e4e4;
+}
+
+.modal-btn-cancel:hover {
+  background-color: #f4f4f4;
+  border-color: #c1c1c1;
+}
+
+.modal-btn-save {
+  background-color: #0079bf;
+  color: white;
+}
+
+.modal-btn-save:hover {
+  background-color: #005a8b;
+}
+
+.modal-btn-save:disabled {
+  background-color: #6b778c;
+  cursor: not-allowed;
+}
+
+/* Responsive Modal */
+@media (max-width: 768px) {
+  .modal {
+    width: 95%;
+    margin: 20px;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: 15px;
+  }
+
+  .modal-footer {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .modal-btn {
+    width: 100%;
+  }
+}
