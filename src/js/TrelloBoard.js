@@ -39,6 +39,7 @@ class TrelloBoard {
   createCard(columnId, cardText, index) {
     const card = document.createElement("div");
     card.className = "card";
+    card.dataset.text = cardText;
     card.textContent = cardText;
     card.dataset.column = columnId;
     card.dataset.index = index;
@@ -90,6 +91,7 @@ class TrelloBoard {
 
   editCard(columnId, index) {
     const currentText = this.state[columnId][index];
+    if (!currentText.trim()) return;
     this.showModal("Edit Card", currentText, (newText) => {
       if (newText !== null && newText.trim()) {
         this.state[columnId][index] = newText.trim();
@@ -207,8 +209,10 @@ class TrelloBoard {
     this.updateCardPosition(e);
     this.draggedCard.style.opacity = "0.5";
 
-    document.addEventListener("mousemove", this.dragMove.bind(this));
-    document.addEventListener("mouseup", this.dragEnd.bind(this));
+    this.boundDragMove = this.dragMove.bind(this);
+    this.boundDragEnd = this.dragEnd.bind(this);
+    document.addEventListener("mousemove", this.boundDragMove);
+    document.addEventListener("mouseup", this.boundDragEnd);
     document.body.style.cursor = "grabbing";
     document.body.style.userSelect = "none";
   }
@@ -224,8 +228,8 @@ class TrelloBoard {
   dragEnd(e) {
     if (!this.draggedCard || !this.cardClone) return;
 
-    document.removeEventListener("mousemove", this.dragMove.bind(this));
-    document.removeEventListener("mouseup", this.dragEnd.bind(this));
+    document.removeEventListener("mousemove", this.boundDragMove);
+    document.removeEventListener("mouseup", this.boundDragEnd);
     document.body.style.cursor = "default";
     document.body.style.userSelect = "";
 
@@ -395,10 +399,7 @@ class TrelloBoard {
   moveCard(targetColumn, e) {
     const targetColumnId = targetColumn.id;
     const cardsContainer = targetColumn.querySelector(".cards");
-    const cardText = this.draggedCard.textContent
-      .replace("✖", "")
-      .replace("✎", "")
-      .trim();
+    const cardText = this.draggedCard.dataset.text;
 
     // Удаляем из исходной колонки
     const sourceColumnIndex = this.state[this.sourceColumnId].indexOf(cardText);
